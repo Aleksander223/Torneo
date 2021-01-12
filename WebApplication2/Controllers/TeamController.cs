@@ -61,12 +61,40 @@ namespace WebApplication2.Controllers
             return Ok(team);
         }
 
+        [Route("leave")]
+        [Authorize(Roles = "User,Admin")]
+        [HttpPost]
+        public ActionResult LeaveTeam(int id)
+        {
+            var userName = HttpContext.User.Claims.FirstOrDefault().Value;
+            var user = context.Users.FirstOrDefault(x => x.UserName == userName);
+
+            user.TeamId = null;
+            context.SaveChanges();
+
+            return Ok(user);
+        }
+
         [HttpGet]
         public ActionResult Get()
         {
             var teams = context.Teams.Include(t => t.Members).ToList();
 
             return Ok(teams);
+        }
+
+        [Route("{id}")]
+        [HttpGet]
+        public ActionResult GetTeam(int id)
+        {
+            var team = context.Teams.Include(t => t.Members).FirstOrDefault(t => t.Id == id);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(team);
         }
 
         [Authorize(Roles = "User,Admin")]
@@ -114,5 +142,32 @@ namespace WebApplication2.Controllers
 
             return Ok(team);
         }
+
+        [Route("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpDelete]
+        public ActionResult DeleteTeam(int id)
+        {
+            var team = context.Teams.FirstOrDefault(x => x.Id == id);
+            var users = context.Users.Where(x => x.TeamId == id);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            context.Teams.Remove(team);
+
+            foreach (var user in users)
+            {
+                user.TeamId = null;
+            }
+
+            context.SaveChanges();
+
+            return Ok("Team deleted");
+        }
+
+
     }
 }

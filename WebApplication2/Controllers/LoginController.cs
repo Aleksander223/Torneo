@@ -21,7 +21,7 @@ namespace WebApplication2.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] UserLoginData userData)
         {
-            var user = context.Users.Single(a => a.Email == userData.Email);
+            var user = context.Users.SingleOrDefault(a => a.Email == userData.Email);
 
             if (user == null)
             {

@@ -47,8 +47,6 @@ namespace WebApplication2.Controllers
         }
 
 
-
-        [Authorize(Roles = "User,Admin")]
         [HttpGet]
         public ActionResult Get()
         {
@@ -56,6 +54,21 @@ namespace WebApplication2.Controllers
 
             return Ok(users);
         }
+
+        [Route("{id}")]
+        [HttpGet]
+        public ActionResult GetUser(int id)
+        {
+            var user = context.Users.FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
 
         [Route("{id}")]
         [Authorize(Roles = "Admin")]
@@ -117,8 +130,6 @@ namespace WebApplication2.Controllers
                 }
 
                 user.TeamId = team.Id;
-                team.Members.Add(user);
-                context.Update(team);
             }
 
             context.Update(user);
@@ -179,6 +190,6 @@ namespace WebApplication2.Controllers
 
             return Ok(user);
         }
-        
+
     }
 }

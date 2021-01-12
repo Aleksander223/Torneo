@@ -3,21 +3,38 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication2.Infrastructure;
 
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210112161037_UpdatedM2M")]
+    partial class UpdatedM2M
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.1");
+
+            modelBuilder.Entity("TeamTournament", b =>
+                {
+                    b.Property<int>("TeamsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TournamentsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeamsId", "TournamentsId");
+
+                    b.HasIndex("TournamentsId");
+
+                    b.ToTable("TeamTournament");
+                });
 
             modelBuilder.Entity("WebApplication2.Models.Game", b =>
                 {
@@ -106,27 +123,15 @@ namespace WebApplication2.Migrations
                     b.ToTable("TeamMatch");
                 });
 
-            modelBuilder.Entity("WebApplication2.Models.TeamTournament", b =>
-                {
-                    b.Property<int>("TeamId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TournamentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TeamId", "TournamentId");
-
-                    b.HasIndex("TournamentId");
-
-                    b.ToTable("TeamTournament");
-                });
-
             modelBuilder.Entity("WebApplication2.Models.Tournament", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<int?>("AdminId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -140,6 +145,8 @@ namespace WebApplication2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
 
                     b.HasIndex("GameId");
 
@@ -182,6 +189,21 @@ namespace WebApplication2.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("TeamTournament", b =>
+                {
+                    b.HasOne("WebApplication2.Models.Team", null)
+                        .WithMany()
+                        .HasForeignKey("TeamsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication2.Models.Tournament", null)
+                        .WithMany()
+                        .HasForeignKey("TournamentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("WebApplication2.Models.Match", b =>
                 {
                     b.HasOne("WebApplication2.Models.Game", "Game")
@@ -222,30 +244,17 @@ namespace WebApplication2.Migrations
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("WebApplication2.Models.TeamTournament", b =>
-                {
-                    b.HasOne("WebApplication2.Models.Team", "Team")
-                        .WithMany("TeamTournaments")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication2.Models.Tournament", "Tournament")
-                        .WithMany("TeamTournaments")
-                        .HasForeignKey("TournamentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Team");
-
-                    b.Navigation("Tournament");
-                });
-
             modelBuilder.Entity("WebApplication2.Models.Tournament", b =>
                 {
+                    b.HasOne("WebApplication2.Models.User", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId");
+
                     b.HasOne("WebApplication2.Models.Game", "Game")
                         .WithMany()
                         .HasForeignKey("GameId");
+
+                    b.Navigation("Admin");
 
                     b.Navigation("Game");
                 });
@@ -269,15 +278,11 @@ namespace WebApplication2.Migrations
                     b.Navigation("Members");
 
                     b.Navigation("TeamMatches");
-
-                    b.Navigation("TeamTournaments");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Tournament", b =>
                 {
                     b.Navigation("Matches");
-
-                    b.Navigation("TeamTournaments");
                 });
 #pragma warning restore 612, 618
         }

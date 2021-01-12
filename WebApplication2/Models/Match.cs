@@ -11,20 +11,19 @@ namespace WebApplication2.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public ICollection<Team> Teams { get; set; }
+        public ICollection<TeamMatch> TeamMatches { get; set; }
 
         [Required]
         public Game Game { get; set; }
 
-        public int Winner { get; set; }
+        public Team Winner { get; set; }
 
         public int Score1 { get; set; }
         public int Score2 { get; set; }
 
         public string Link { get; set; }
 
+        public int? TournamentId { get; set; }
         public Tournament Tournament { get; set; }
-
     }
 }

@@ -16,15 +16,28 @@ namespace WebApplication2.Models
 
         public ICollection<User> Members { get; set; }
 
-        public ICollection<Match> Matches { get; set; }
+        public ICollection<TeamMatch> TeamMatches { get; set; }
 
-        public ICollection<Tournament> Tournaments { get; set; }
+        public ICollection<TeamTournament> TeamTournaments { get; set; }
+    }
 
-        public Team()
-        {
-            Members = new List<User>();
-            Matches = new List<Match>();
-            Tournaments = new List<Tournament>();
-        }
+    public class TeamMatch
+    {
+        public int TeamId { get; set; }
+        public Team Team { get; set; }
+
+        public int MatchId { get; set; }
+
+        public Match Match { get; set; }
+    }
+
+    public class TeamTournament
+    {
+        public int  TeamId { get; set; }
+        public Team Team { get; set; }
+
+        public int TournamentId { get; set; }
+
+        public Tournament Tournament { get; set; }
     }
 }

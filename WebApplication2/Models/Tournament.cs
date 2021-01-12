@@ -17,10 +17,7 @@ namespace WebApplication2.Models
         [Required]
         public string Description { get; set; }
 
-        [Required]
-        public User Admin { get; set; }
-
-        public ICollection<Team> Teams { get; set; }
+        public ICollection<TeamTournament> TeamTournaments { get; set; }
 
         public ICollection<Match> Matches { get; set; }
         
