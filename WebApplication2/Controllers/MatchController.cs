@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,7 +60,7 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            var matches = context.Matches.ToList();
+            var matches = context.Matches.Include(t => t.TeamMatches).ThenInclude(t => t.Team).Include(t => t.Tournament).Include(t => t.Winner).Include(t => t.Game).ToList();
 
             return Ok(matches);
         }

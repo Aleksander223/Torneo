@@ -5,6 +5,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import {
+  Link
+} from "react-router-dom";
 
 export default function AppMobileMenu() {
     const useStyles = makeStyles((theme) => ({
@@ -40,10 +43,12 @@ export default function AppMobileMenu() {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Home</MenuItem>
-        <MenuItem onClick={handleClose}>Tournaments</MenuItem>
-        <MenuItem onClick={handleClose}>Teams</MenuItem>
-        <MenuItem onClick={handleClose}>Matches</MenuItem>
+        <MenuItem component={ Link } to ="/" onClick={handleClose}>Home</MenuItem>
+        <MenuItem component={ Link } to ="/users" onClick={handleClose}>Users</MenuItem>
+        <MenuItem component={ Link } to ="/games" onClick={handleClose}>Games</MenuItem>
+        <MenuItem component={ Link } to ="/tournaments" onClick={handleClose}>Tournaments</MenuItem>
+        <MenuItem component={ Link } to ="/teams" onClick={handleClose}>Teams</MenuItem>
+        <MenuItem component={ Link } to ="/matches" onClick={handleClose}>Matches</MenuItem>
       </Menu>
     </div>
   );

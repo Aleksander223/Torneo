@@ -12,13 +12,13 @@ using WebApplication2.Models;
 namespace WebApplication2.Controllers
 {
     [ApiController]
-    [Route("login")]
     public class LoginController : Controller
     {
 
         private readonly AppDbContext context = new AppDbContext();
 
         [HttpPost]
+        [Route("login")]
         public ActionResult Post([FromBody] UserLoginData userData)
         {
             var user = context.Users.SingleOrDefault(a => a.Email == userData.Email);
@@ -44,6 +44,15 @@ namespace WebApplication2.Controllers
             var identity = new ClaimsIdentity(userClaims, "User Identity");
             var userPrincipal = new ClaimsPrincipal(new[] { identity });
             HttpContext.SignInAsync(userPrincipal);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("signout")]
+        public ActionResult SignOut()
+        {
+            HttpContext.SignOutAsync();
 
             return Ok();
         }

@@ -106,7 +106,7 @@ export default class HomeCarousel extends React.Component {
 
     render() {
         return (
-            <div style={{ marginTop: "50px", color: "#494949" }}>
+            <div style={{ marginTop: "50px", color: "#494949", padding: "25px", minHeight: "250px"}}>
                 <h2>Check out our features</h2>
 
                 <Carousel

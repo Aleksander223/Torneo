@@ -129,7 +129,7 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            var tournaments = context.Tournaments.ToList();
+            var tournaments = context.Tournaments.Include(t => t.Game).Include(t => t.TeamTournaments).ThenInclude(t => t.Team).Include(t => t.Matches).ThenInclude(t => t.TeamMatches).ThenInclude(t => t.Team).ToList();
             return Ok(tournaments);
         }
 
@@ -137,7 +137,7 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public ActionResult GetById(int id)
         {
-            var tournament = context.Tournaments.FirstOrDefault(t => t.Id == id);
+            var tournament = context.Tournaments.Include(t => t.Game).Include(t => t.TeamTournaments).ThenInclude(t => t.Team).Include(t => t.Matches).ThenInclude(t => t.TeamMatches).ThenInclude(t => t.Team).FirstOrDefault(t => t.Id == id);
 
             if (tournament == null)
             {
@@ -152,7 +152,7 @@ namespace WebApplication2.Controllers
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            var tournament = context.Tournaments.FirstOrDefault(m => m.Id == id);
+            var tournament = context.Tournaments.Include(t => t.Matches).FirstOrDefault(m => m.Id == id);
 
             if (tournament == null)
             {
@@ -164,6 +164,11 @@ namespace WebApplication2.Controllers
             foreach (var tt in teamTournaments)
             {
                 context.Remove(tt);
+            }
+
+            foreach(var match in tournament.Matches)
+            {
+                context.Remove(match);
             }
 
             context.Remove(tournament);

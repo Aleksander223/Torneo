@@ -17,6 +17,7 @@ namespace WebApplication2
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +28,10 @@ namespace WebApplication2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => options.AddPolicy("AllowAll", p => p.WithOrigins("http://localhost:3000", "http://127.0.0.1:3000")
+                                                                    .AllowAnyMethod()
+                                                                     .AllowAnyHeader().AllowCredentials()));
+
             services.AddAuthentication("CookieAuthentication").AddCookie("CookieAuthentication", config => {
                 config.Cookie.Name = "UserLoginCookie";
                 config.LoginPath = "/login";
@@ -41,8 +46,9 @@ namespace WebApplication2
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors("AllowAll");
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
