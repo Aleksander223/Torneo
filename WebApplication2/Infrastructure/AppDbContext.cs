@@ -47,5 +47,9 @@ namespace WebApplication2.Infrastructure
         public virtual DbSet<Game> Games { get; set; }
         public virtual DbSet<Tournament> Tournaments { get; set; }
 
+        public virtual DbSet<TeamTournament> TeamTournaments { get; set; }
+
+        public virtual DbSet<TeamMatch> TeamMatches { get; set; }
+
     }
 }

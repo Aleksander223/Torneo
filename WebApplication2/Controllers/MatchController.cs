@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication2.Data;
 using WebApplication2.Infrastructure;
+using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
@@ -15,8 +16,48 @@ namespace WebApplication2.Controllers
     {
         private readonly AppDbContext context = new AppDbContext();
 
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult Post([FromBody] MatchCreateData matchData)
+        {
+            var game = context.Games.FirstOrDefault(g => g.Id == matchData.GameId);
+            var team1 = context.Teams.FirstOrDefault(t => t.Id == matchData.Team1Id);
+            var team2 = context.Teams.FirstOrDefault(t => t.Id == matchData.Team2Id);
+
+            var match = new Match
+            {
+                Game = game
+            };
+
+
+
+            context.Add(match);
+            context.SaveChanges();
+
+            var teamMatch1 = new TeamMatch
+            {
+                TeamId = team1.Id,
+                MatchId = match.Id
+            };
+
+            var teamMatch2 = new TeamMatch
+            {
+                TeamId = team2.Id,
+                MatchId = match.Id
+            };
+
+            context.TeamMatches.Add(teamMatch1);
+            context.TeamMatches.Add(teamMatch2);
+
+            context.SaveChanges();
+
+            return Ok(match);
+        }
+        
+
         [HttpGet]
-        public IActionResult Get()
+        public ActionResult Get()
         {
             var matches = context.Matches.ToList();
 
@@ -25,7 +66,7 @@ namespace WebApplication2.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        public IActionResult GetMatch(int id)
+        public ActionResult GetMatch(int id)
         {
             var match = context.Matches.FirstOrDefault(x => x.Id == id);
 
@@ -40,7 +81,7 @@ namespace WebApplication2.Controllers
         [Route("{id}")]
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public IActionResult Put(int id, [FromBody] MatchUpdateData matchData)
+        public ActionResult Put(int id, [FromBody] MatchUpdateData matchData)
         {
             var match = context.Matches.FirstOrDefault(m => m.Id == id);
 
@@ -92,7 +133,7 @@ namespace WebApplication2.Controllers
         [Route("{id}")]
         [Authorize(Roles = "Admin")]
         [HttpDelete]
-        public IActionResult Delete (int id)
+        public ActionResult Delete (int id)
         {
             var match = context.Matches.FirstOrDefault(m => m.Id == id);
 

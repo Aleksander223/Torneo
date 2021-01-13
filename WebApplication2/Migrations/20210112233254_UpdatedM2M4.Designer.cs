@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication2.Infrastructure;
 
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210112233254_UpdatedM2M4")]
+    partial class UpdatedM2M4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,9 +61,6 @@ namespace WebApplication2.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("TournamentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TournamentOrder")
                         .HasColumnType("int");
 
                     b.Property<int?>("WinnerId")

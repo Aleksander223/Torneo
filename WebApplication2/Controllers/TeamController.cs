@@ -78,7 +78,10 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            var teams = context.Teams.Include(t => t.Members).ToList();
+            var teams = context.Teams.Include(t => t.Members)
+                .Include(t => t.TeamMatches).ThenInclude(tm => tm.Match).ThenInclude(m => m.Game)
+                .Include(t => t.TeamMatches).ThenInclude(tm => tm.Match).ThenInclude(m => m.Tournament)
+                .Include(t => t.TeamTournaments).ThenInclude(tt => tt.Tournament).ToList();
 
             return Ok(teams);
         }
@@ -87,7 +90,11 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public ActionResult GetTeam(int id)
         {
-            var team = context.Teams.Include(t => t.Members).FirstOrDefault(t => t.Id == id);
+            var team = context.Teams.Include(t => t.Members)
+                .Include(t => t.TeamMatches).ThenInclude(tm => tm.Match).ThenInclude(m => m.Game)
+                .Include(t => t.TeamMatches).ThenInclude(tm => tm.Match).ThenInclude(m => m.Tournament)
+                .Include(t => t.TeamTournaments).ThenInclude(tt => tt.Tournament)
+                .FirstOrDefault(t => t.Id == id);
 
             if (team == null)
             {
