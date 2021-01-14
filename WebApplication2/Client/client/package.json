@@ -12,6 +12,7 @@
     "axios": "^0.21.1",
     "namor": "^2.0.2",
     "react": "^17.0.1",
+    "react-brackets": "^0.4.4",
     "react-cookie": "^4.0.3",
     "react-dom": "^17.0.1",
     "react-edit-text": "^3.0.1",

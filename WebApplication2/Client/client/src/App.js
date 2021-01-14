@@ -39,6 +39,7 @@ import Tournaments from './Pages/Tournaments';
 import Games from './Pages/Games';
 import Matches from './Pages/Matches';
 import AddTeam from './Pages/AddTeam';
+import Tournament from './Pages/Tournament';
 
 const cookies = new Cookies();
 
@@ -217,6 +218,7 @@ function App() {
         <Route exact path="/users" component={responseData.role === "Admin" ? Users : UsersList} ></Route>
         <Route exact path="/games" component={responseData.role === "Admin" ? Games : GamesList}></Route>
         <Route exact path="/tournaments" component={responseData.role === "Admin" ? Tournaments : TournamentsList}></Route>
+        <Route exact path="/tournaments/:id" render={(props) => <Tournament {...props} />}></Route>
         <Route exact path="/teams" render={(props) => responseData.role === "Admin" ? <Teams/> : <TeamsList {...props} anonymous={responseData.role === "Anonymous" ? true : false} />}></Route>
         <Route exact path="/teams/create" component={AddTeam} />
         <Route exact path="/matches" render={(props) => responseData.role === "Admin" ? <Matches/> : <Redirect to="/"></Redirect>}></Route>

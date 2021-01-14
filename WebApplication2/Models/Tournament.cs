@@ -12,9 +12,11 @@ namespace WebApplication2.Models
         public int Id { get; set; }
 
         [Required]
+        [MinLength(3)]
         public string Name { get; set; }
 
         [Required]
+        [MinLength(3)]
         public string Description { get; set; }
 
         public ICollection<TeamTournament> TeamTournaments { get; set; }
